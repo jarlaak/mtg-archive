@@ -1,0 +1,7 @@
+local:
+  driver: postgres
+  open: dbname=mtg-local
+
+development:
+  driver: postgres
+  open: $MTG_DATABASE
