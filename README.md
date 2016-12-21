@@ -12,3 +12,4 @@ Tools
 * **Goose** - Database migrations (`go get bitbucket.org/liamstask/goose/cmd/goose`)
 * **postgres** - Database engine
 * **gorilla/mux** - Request router (`go get github.com/gorilla/mux`)
+* **go-logging** - Logger (`go get github.com/op/go-logging`)
