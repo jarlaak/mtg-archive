@@ -8,7 +8,7 @@ import (
         "github.com/jarlaak/mtg-archive"
 )
 
-var logger = archive.InitializeLogger()
+var logger = archive.GetLogger()
 
 func AliveHandler(w http.ResponseWriter, r* http.Request) {
     w.Header().Set("Content-Type", "application/json")
@@ -23,10 +23,10 @@ func main() {
     logger.Info("start server")
 
     srv := http.Server{
-	Handler: r,
+        Handler: r,
         Addr: ":8080",
-	WriteTimeout: 30 * time.Second,
-	ReadTimeout: 30 * time.Second,
+        WriteTimeout: 30 * time.Second,
+        ReadTimeout: 30 * time.Second,
     }
     srv.ListenAndServe()
 }
