@@ -1,37 +1,46 @@
 package archive
 
 import (
-        "github.com/gorilla/mux"
-        "fmt"
-        "net/http"
-        "time"
+	"encoding/json"
+	"github.com/jarlaak/mtg-archive/server"
+	"net/http"
+	"time"
 )
 
-func AliveHandler(w http.ResponseWriter, r* http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    fmt.Fprintf(w, "{\"server\": \"mtg-server\", \"version\":\"0.0.0\"}");
-    logger.Info("/alive call")
+type Alive struct {
+	Server      string `json:"server"`
+	Version     string `json:"version"`
+	Api_version int    `json:"api_version,omitempty"`
 }
 
-func V1AliveHandler(w http.ResponseWriter, r* http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    fmt.Fprintf(w, "{\"server\": \"mtg-server\", \"api-version\": \"1\", \"version\":\"0.0.0\"}");
-    logger.Info("/mtg/v1/alive call")
+func AliveHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(Alive{Server: "mtg-server", Version: "0.0.0"})
+}
+
+func V1AliveHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	json.NewEncoder(w).Encode(Alive{Server: "mtg-server", Version: "0.0.0", Api_version: 1})
 }
 
 func RunServer() {
-    r := mux.NewRouter()
-    r.HandleFunc("/alive", AliveHandler)
+	if logger == nil {
+		logger = GetLogger()
+	}
+	server.UseLogger(logger)
+	r := server.NewRouter()
+	r.HandleFunc("/alive", AliveHandler)
 
-    mtgRouter := r.PathPrefix("/mtg/v1").Subrouter()
-    mtgRouter.HandleFunc("/alive",V1AliveHandler)
-    logger.Info("start server")
+	mtgRouter := r.PathPrefix("/mtg/v1").Subrouter()
+	mtgRouter.HandleFunc("/alive", V1AliveHandler)
+	logger.Info("start server")
 
-    srv := http.Server{
-        Handler: r,
-        Addr: ":8080",
-        WriteTimeout: 30 * time.Second,
-        ReadTimeout: 30 * time.Second,
-    }
-    srv.ListenAndServe()
+	srv := http.Server{
+		Handler:      r,
+		Addr:         ":8080",
+		WriteTimeout: 30 * time.Second,
+		ReadTimeout:  30 * time.Second,
+	}
+	logger.Fatal(srv.ListenAndServe())
 }
