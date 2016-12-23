@@ -1,11 +1,7 @@
 package server
 
-import (
-	"github.com/op/go-logging"
-)
+import ()
 
-var logger *logging.Logger
-
-func UseLogger(log *logging.Logger) {
-	logger = log
+func GetLogger() Logger {
+	return NewIOLogger()
 }

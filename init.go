@@ -1,22 +1,16 @@
 package archive
 
 import (
-	"github.com/op/go-logging"
-	"os"
+	"github.com/jarlaak/mtg-archive/server"
 )
 
-var logger *logging.Logger
+var logger server.Logger
 
 func InitializeLogger() {
-	log := logging.MustGetLogger("mtg")
-	loggerBackend := logging.NewLogBackend(os.Stderr, "mtg-archive: ", 0)
-	leveledLogger := logging.AddModuleLevel(loggerBackend)
-	leveledLogger.SetLevel(logging.DEBUG, "")
-	log.SetBackend(leveledLogger)
-	logger = log
+	logger = server.NewIOLogger()
 }
 
-func GetLogger() *logging.Logger {
+func GetLogger() server.Logger {
 	if logger == nil {
 		InitializeLogger()
 	}
