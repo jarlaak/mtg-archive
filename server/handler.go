@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -25,9 +26,9 @@ func LogRequest(handler requestHandler) requestHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		mrw := NewAdvancedResponseWriter(w)
-		logger.Info(r.Method, r.URL)
+		logger.Info(fmt.Sprintf("%s %s", r.Method, r.URL))
 		handler(mrw, r)
 		elapsed := time.Since(start)
-		logger.Info("request STATUS", mrw.statusCode, ", TIMING: ", elapsed)
+		logger.Info(fmt.Sprintf("request STATUS %3.0d, TIMING: %v", mrw.statusCode, elapsed))
 	}
 }

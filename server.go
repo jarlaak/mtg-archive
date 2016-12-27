@@ -2,6 +2,7 @@ package archive
 
 import (
 	"encoding/json"
+	"github.com/gorilla/handlers"
 	"github.com/jarlaak/mtg-archive/server"
 	"net/http"
 	"time"
@@ -20,7 +21,6 @@ func AliveHandler(w http.ResponseWriter, r *http.Request) {
 
 func V1AliveHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(500)
 	json.NewEncoder(w).Encode(Alive{Server: "mtg-server", Version: "0.0.0", Api_version: 1})
 }
 
@@ -36,8 +36,10 @@ func RunServer() {
 	mtgRouter.HandleFunc("/alive", V1AliveHandler)
 	logger.Info("start server")
 
+	recoveryHandler := handlers.RecoveryHandler(handlers.RecoveryLogger(logger),
+		handlers.PrintRecoveryStack(true))(r)
 	srv := http.Server{
-		Handler:      r,
+		Handler:      recoveryHandler,
 		Addr:         ":8080",
 		WriteTimeout: 30 * time.Second,
 		ReadTimeout:  30 * time.Second,
