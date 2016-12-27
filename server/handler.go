@@ -29,6 +29,6 @@ func LogRequest(handler requestHandler) requestHandler {
 		logger.Info(fmt.Sprintf("%s %s", r.Method, r.URL))
 		handler(mrw, r)
 		elapsed := time.Since(start)
-		logger.Info(fmt.Sprintf("request STATUS %3.0d, TIMING: %v", mrw.statusCode, elapsed))
+		logger.Info(fmt.Sprintf("STATUS %3.0d, TIMING: %v", mrw.statusCode, elapsed))
 	}
 }

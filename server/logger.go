@@ -24,7 +24,7 @@ func UseLogger(log Logger) {
 	logger = log
 }
 
-// STDIO Logger
+// STDIO Logger (TODO: move to its own file when more than one logger is implemented)
 type IOLogger struct {
 	*logging.Logger
 }
@@ -56,5 +56,5 @@ func (logger IOLogger) Fatal(v ...interface{}) {
 	logger.Logger.Fatal(fmt.Sprint(v...))
 }
 func (logger IOLogger) Println(v ...interface{}) {
-	logger.Logger.Error(fmt.Sprint(v...))
+	logger.Logger.Error(v)
 }

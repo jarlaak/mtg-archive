@@ -25,13 +25,11 @@ func NewAdvancedRoute(r *mux.Route) *AdvancedRoute {
 }
 
 func (r *AdvancedRouter) HandleFunc(path string, f requestHandler) {
-	handler := LogRequest(f)
-	r.Router.HandleFunc(path, handler)
+	r.Router.HandleFunc(path, LogRequest(f))
 }
 
 func (r *AdvancedRoute) Subrouter() *AdvancedRouter {
-	sr := r.Route.Subrouter()
-	return NewAdvancedRouter(sr)
+	return NewAdvancedRouter(r.Route.Subrouter())
 }
 
 func (r *AdvancedRouter) PathPrefix(path string) *AdvancedRoute {

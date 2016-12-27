@@ -1,7 +1,6 @@
 package archive
 
 import (
-	"encoding/json"
 	"github.com/gorilla/handlers"
 	"github.com/jarlaak/mtg-archive/server"
 	"net/http"
@@ -15,13 +14,11 @@ type Alive struct {
 }
 
 func AliveHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Alive{Server: "mtg-server", Version: "0.0.0"})
+	server.SendJSON(w, Alive{Server: "mtg-server", Version: "0.0.0"})
 }
 
 func V1AliveHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Alive{Server: "mtg-server", Version: "0.0.0", Api_version: 1})
+	server.SendJSON(w, Alive{Server: "mtg-server", Version: "0.0.0", Api_version: 1})
 }
 
 func RunServer() {
