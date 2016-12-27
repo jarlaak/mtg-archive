@@ -13,3 +13,4 @@ Tools
 * **postgres** - Database engine
 * **gorilla/mux** - Request router (`go get github.com/gorilla/mux`)
 * **go-logging** - Logger (`go get github.com/op/go-logging`)
+* **gorm** - ORM package to use postgres from go (`go get github.com/jinzhu/gorm`)

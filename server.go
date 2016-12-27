@@ -5,6 +5,7 @@ import (
 	"github.com/jarlaak/mtg-archive/server"
 	"net/http"
 	"time"
+	model "github.com/jarlaak/mtg-archive/models"
 )
 
 type Alive struct {
@@ -21,17 +22,26 @@ func V1AliveHandler(w http.ResponseWriter, r *http.Request) {
 	server.SendJSON(w, Alive{Server: "mtg-server", Version: "0.0.0", Api_version: 1})
 }
 
-func RunServer() {
+func InitServer() {
 	if logger == nil {
 		logger = GetLogger()
 	}
 	server.UseLogger(logger)
+
+	InitializeDatabase()
+	db.SetLogger(logger)
+	logger.Info("server initialized")
+}
+
+func RunServer() {
+	InitServer()
+	defer db.Close()
+
 	r := server.NewRouter()
 	r.HandleFunc("/alive", AliveHandler)
 
 	mtgRouter := r.PathPrefix("/mtg/v1").Subrouter()
 	mtgRouter.HandleFunc("/alive", V1AliveHandler)
-	logger.Info("start server")
 
 	recoveryHandler := handlers.RecoveryHandler(handlers.RecoveryLogger(logger),
 		handlers.PrintRecoveryStack(true))(r)

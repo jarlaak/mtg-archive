@@ -16,6 +16,7 @@ type Logger interface {
 	/* NO NOT USE: this is redirected to  ERROR to comply
 	   mux/handler RecoverHandler Error mechanism */
 	Println(...interface{})
+	Print(...interface{})
 }
 
 var logger Logger
@@ -49,12 +50,19 @@ func (logger IOLogger) Info(v ...interface{}) {
 func (logger IOLogger) Warn(v ...interface{}) {
 	logger.Logger.Warning(fmt.Sprint(v...))
 }
+
 func (logger IOLogger) Error(v ...interface{}) {
 	logger.Logger.Error(fmt.Sprint(v...))
 }
+
 func (logger IOLogger) Fatal(v ...interface{}) {
 	logger.Logger.Fatal(fmt.Sprint(v...))
 }
+
 func (logger IOLogger) Println(v ...interface{}) {
+	logger.Logger.Error(v)
+}
+
+func (logger IOLogger) Print(v ...interface{}) {
 	logger.Logger.Error(v)
 }
