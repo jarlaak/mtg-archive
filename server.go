@@ -2,6 +2,7 @@ package archive
 
 import (
 	"github.com/gorilla/handlers"
+	ctrl "github.com/jarlaak/mtg-archive/controllers"
 	"github.com/jarlaak/mtg-archive/server"
 	"net/http"
 	"time"
@@ -29,6 +30,8 @@ func InitServer() {
 
 	InitializeDatabase()
 	db.SetLogger(logger)
+
+	ctrl.Init(db, logger)
 	logger.Info("server initialized")
 }
 
