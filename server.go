@@ -5,7 +5,6 @@ import (
 	"github.com/jarlaak/mtg-archive/server"
 	"net/http"
 	"time"
-	model "github.com/jarlaak/mtg-archive/models"
 )
 
 type Alive struct {

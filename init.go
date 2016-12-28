@@ -2,7 +2,7 @@ package archive
 
 import (
 	"github.com/jarlaak/mtg-archive/server"
-        "github.com/jinzhu/gorm"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -21,9 +21,8 @@ func GetLogger() server.Logger {
 	return logger
 }
 
-
 func InitializeDatabase() {
-	database, err := gorm.Open("postgres","dbname=mtg-local")
+	database, err := gorm.Open("postgres", "dbname=mtg-local")
 	if err != nil {
 		panic(err)
 	}
