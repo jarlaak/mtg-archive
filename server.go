@@ -48,10 +48,11 @@ func RunServer() {
 	recoveryHandler := handlers.RecoveryHandler(handlers.RecoveryLogger(logger),
 		handlers.PrintRecoveryStack(true))(r)
 	srv := http.Server{
-		Handler:      recoveryHandler,
-		Addr:         ":8080",
-		WriteTimeout: 30 * time.Second,
-		ReadTimeout:  30 * time.Second,
+		Handler:        recoveryHandler,
+		Addr:           ":8080",
+		WriteTimeout:   30 * time.Second,
+		ReadTimeout:    30 * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
 	logger.Fatal(srv.ListenAndServe())
 }

@@ -1,7 +1,9 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 )
@@ -31,4 +33,11 @@ func LogRequest(handler requestHandler) requestHandler {
 		elapsed := time.Since(start)
 		logger.Info(fmt.Sprintf("STATUS %3.0d, TIMING: %v", mrw.statusCode, elapsed))
 	}
+}
+
+func ReadPostBody(r *http.Request, v interface{}) error {
+	limitedReader := io.LimitReader(r.Body, 1<<22)
+
+	decoder := json.NewDecoder(limitedReader)
+	return decoder.Decode(v)
 }
