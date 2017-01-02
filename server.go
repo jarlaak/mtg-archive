@@ -3,6 +3,7 @@ package archive
 import (
 	"github.com/gorilla/handlers"
 	ctrl "github.com/jarlaak/mtg-archive/controllers"
+	"github.com/jarlaak/mtg-archive/models"
 	"github.com/jarlaak/mtg-archive/server"
 	"net/http"
 	"time"
@@ -31,7 +32,8 @@ func InitServer() {
 	InitializeDatabase()
 	db.SetLogger(logger)
 
-	ctrl.Init(db, logger)
+	ctrl.Init(logger)
+	models.Init(db, logger)
 	logger.Info("server initialized")
 }
 
@@ -43,6 +45,7 @@ func RunServer() {
 	r.HandleFunc("/alive", AliveHandler)
 
 	mtgRouter := r.PathPrefix("/mtg/v1").Subrouter()
+	ctrl.InitCardsController(mtgRouter)
 	mtgRouter.HandleFunc("/alive", V1AliveHandler)
 
 	recoveryHandler := handlers.RecoveryHandler(handlers.RecoveryLogger(logger),

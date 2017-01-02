@@ -12,3 +12,9 @@ type Card struct {
 	CreatedAt    time.Time `json:"-"`
 	UpdatedAt    time.Time `gorm:"column:modified_at" json:"-"`
 }
+
+func GetCards(ids []int) []Card {
+	var cards []Card
+	db.Preload("CardInfo").Where("id in (?)", ids).Find(&cards)
+	return cards
+}
